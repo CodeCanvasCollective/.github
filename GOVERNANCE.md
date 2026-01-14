@@ -1,9 +1,3 @@
-Here is a **Contributor Governance Ladder** tailored for **CodeCanvas Collective**.
-
-You can copy this directly into a `GOVERNANCE.md` file in your repository. It is designed to be welcoming to new users while providing a clear path for dedicated contributors to gain more responsibility.
-
----
-
 # CodeCanvas Collective: Governance & Contributor Ladder
 
 At CodeCanvas Collective, we believe in meritocracy and transparency. This document outlines the different roles within our community, the responsibilities associated with each, and how contributors can "level up" to help manage the organization.

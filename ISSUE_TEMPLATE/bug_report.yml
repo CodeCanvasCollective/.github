@@ -1,0 +1,70 @@
+name: 🐞 Bug Report
+description: File a bug report to help us improve CodeCanvas.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 
+        Please verify that you have searched our existing issues to ensure this isn't a duplicate.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A concise description of the bug.
+      placeholder: I clicked the "Export" button, but the screen flashed white and nothing downloaded.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue on our end?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: The file should have downloaded to my desktop.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Context
+      description: Please list your OS, Browser, and Version (if applicable).
+      placeholder: |
+        - OS: Windows 11
+        - Browser: Chrome 120
+        - Version: v1.2.0
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Log Output or Screenshots
+      description: Please copy and paste any relevant log output or drag and drop screenshots here.
+      render: shell
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct.
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

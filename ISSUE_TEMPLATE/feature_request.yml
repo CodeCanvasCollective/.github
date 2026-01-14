@@ -1,0 +1,53 @@
+name: ✨ Feature Request
+description: Suggest an idea for this project.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! 
+        Please keep in mind that we are an open-source startup. Features are prioritized based on value to the community.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of what the problem is.
+      placeholder: Ex. I'm always frustrated when I have to click three times just to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+      placeholder: I would like a keyboard shortcut (Ctrl+S) to save immediately.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: Have you tried other workarounds? Why didn't they work?
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to work on this?
+      description: We love community contributions!
+      options:
+        - "Yes, I can submit a PR if this is approved."
+        - "No, I am suggesting this for someone else to build."
+    validations:
+      required: true

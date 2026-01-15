@@ -39,8 +39,12 @@ Our mission is to provide:
 | 🛠️ **Developer Ready** | Full JSON import/export for power users. |
 
 <div align="center">
+  <a href="https://chromewebstore.google.com/detail/c3-autofill/flfjppiggoaijjfefghjbjkkdgmpaado">
+    <img src="https://img.shields.io/badge/Download-Chrome_Web_Store-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" />
+  </a>
+  
   <a href="https://c3autofill.codecanvascollective.com">
-    <img src="https://img.shields.io/badge/Download_Extension-Chrome_Web_Store-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Download C3 Autofill" />
+    <img src="https://img.shields.io/badge/Visit-Website-blue?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
 </div>
 

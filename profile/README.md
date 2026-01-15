@@ -6,7 +6,7 @@
 
   **Empowering Innovation Through Code, Creativity, and Community.**
 
-  [![Discord](https://img.shields.io/discord/YOUR_DISCORD_ID?label=Join%20Community&logo=discord&style=flat-square)](https://discord.gg/s5RfVbVV)
+  [![Discord](https://img.shields.io/discord/1461087304927150114?label=Join%20Community&logo=discord&style=flat-square)](https://discord.gg/s5RfVbVV)
   [![License](https://img.shields.io/github/license/CodeCanvasCollective/c3-autofill?style=flat-square)](LICENSE)
   [![Open Collective](https://img.shields.io/opencollective/backers/codecanvas?style=flat-square)](https://opencollective.com/codecanvas)
   [![Website](https://img.shields.io/website?label=codecanvascollective.com&style=flat-square&url=https%3A%2F%2Fcodecanvascollective.com)](https://codecanvascollective.com)

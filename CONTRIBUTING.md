@@ -5,7 +5,7 @@ First off, thank you for considering contributing to CodeCanvas. It's people lik
 We are a community-led organization. Whether you are fixing a typo, adding a major feature, or updating documentation, your help is appreciated and recognized.
 
 ## 🌟 Quick Links
-* **[Join the Discord]([LINK_TO_DISCORD](https://discord.gg/s5RfVbVV))** - Chat with us and ask questions.
+* **[Join the Discord]([https://discord.gg/s5RfVbVV])** - Chat with us and ask questions.
 * **[View the Roadmap](LINK_TO_PROJECT_BOARD)** - See what we are working on.
 * **[Governance](GOVERNANCE.md)** - Learn how to become a Maintainer.
 

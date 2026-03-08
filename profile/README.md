@@ -38,6 +38,10 @@ Our mission is to provide:
 | 🧠 **Smart Logic** | AI-driven field recognition that learns as you browse. |
 | 🛠️ **Developer Ready** | Full JSON import/export for power users. |
 
+**Tech:** Chrome MV3 · JavaScript · Content Scripts · Local Storage · JSON Import/Export
+
+📐 [**Architecture**](../FLAGSHIP_PROJECT/c3-autofill/ARCHITECTURE.md) · 📁 [**Project Structure**](../FLAGSHIP_PROJECT/c3-autofill/STRUCTURE.md) · 🔀 [**Data Flow Diagrams**](../FLAGSHIP_PROJECT/c3-autofill/DATA_FLOW.md)
+
 <div align="center">
   <a href="https://chromewebstore.google.com/detail/c3-autofill/flfjppiggoaijjfefghjbjkkdgmpaado">
     <img src="https://img.shields.io/badge/Download-Chrome_Web_Store-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" />
@@ -67,13 +71,13 @@ Our mission is to provide:
 
 **Tech:** Python 3.13 · FastAPI · Electron · Chrome MV3 · Gemini AI · MCP · SQLite · Turborepo · pnpm + uv · GitHub Actions
 
-📐 [**Architecture**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/ARCHITECTURE.md) · 📁 [**Project Structure**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/STRUCTURE.md) · 🔀 [**Data Flow Diagrams**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/DATA_FLOW.md)
+📐 [**Architecture**](../FLAGSHIP_PROJECT/job-compass/ARCHITECTURE.md) · 📁 [**Project Structure**](../FLAGSHIP_PROJECT/job-compass/STRUCTURE.md) · 🔀 [**Data Flow Diagrams**](../FLAGSHIP_PROJECT/job-compass/DATA_FLOW.md)
 
 <div align="center">
-  <a href="https://job-compass.codecanvascollective.com">
+  <a href="https://jobcompass.codecanvascollective.com">
     <img src="https://img.shields.io/badge/Visit-Website-blue?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
-  <a href="https://chromewebstore.google.com/detail/job-compass/ldiakgifmpecpocnchfhekjgjmjbfhfm">
+  <a href="https://chromewebstore.google.com/detail/job-compass/mcijkiaocloobahpjbcelfgaamdgajce">
     <img src="https://img.shields.io/badge/Download-Chrome_Web_Store-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
 </div>

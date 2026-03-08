@@ -322,6 +322,6 @@ stateDiagram-v2
 
 <div align="center">
 
-[Back to Organization Profile](../README.md)
+[Back to Organization Profile](../../profile/README.md)
 
 </div>

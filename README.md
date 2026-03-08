@@ -5,6 +5,9 @@
 │   ├── bug_report.yml
 │   ├── feature_request.yml
 │   └── config.yml
+├── FLAGSHIP_PROJECT/           <-- (Folder) Shared docs for flagship products
+│   ├── c3-autofill/            <-- Architecture, structure, and data-flow docs
+│   └── job-compass/            <-- Architecture, structure, and data-flow docs
 ├── profile/                    <-- (Folder) Your Org's marketing "Face"
 │   └── README.md               <-- (Existing) visible on your Org homepage
 ├── workflow-templates/         <-- (Folder) Starter CI/CD pipelines for new repos

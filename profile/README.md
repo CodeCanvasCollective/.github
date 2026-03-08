@@ -50,6 +50,36 @@ Our mission is to provide:
 
 ---
 
+## 🧭 Job Compass — AI-Powered Job Hunt Platform
+
+> *Your intelligent companion for the modern job search.*
+
+**Job Compass** is a full-stack, cross-platform job hunting toolkit — a polyglot monorepo combining a **Chrome Extension**, **Electron Desktop App**, **FastAPI Backend**, and **AI-powered MCP Servers**.
+
+| Feature | Description |
+| :--- | :--- |
+| 🔍 **Smart Extraction** | Auto-captures jobs from 12+ platforms (LinkedIn, Indeed, Glassdoor, Seek...) |
+| 🤖 **AI Scoring** | Gemini-powered skill matching, gap analysis, and relevance scoring |
+| ✉️ **Cover Letters** | AI-generated with company research and custom rules |
+| 🗓️ **Interview Pipeline** | Schedule, track rounds, export .ics, desktop reminders |
+| 📓 **Notion Sync** | Push applied jobs to Notion with rich metadata |
+| 🔎 **Job Search** | Automated daily search via Adzuna & Jooble APIs |
+
+**Tech:** Python 3.13 · FastAPI · Electron · Chrome MV3 · Gemini AI · MCP · SQLite · Turborepo · pnpm + uv · GitHub Actions
+
+📐 [**Architecture**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/ARCHITECTURE.md) · 📁 [**Project Structure**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/STRUCTURE.md) · 🔀 [**Data Flow Diagrams**](https://github.com/CodeCanvasCollective/.github/blob/main/profile/job-compass/DATA_FLOW.md)
+
+<div align="center">
+  <a href="https://job-compass.codecanvascollective.com">
+    <img src="https://img.shields.io/badge/Visit-Website-blue?style=for-the-badge&logo=google-chrome&logoColor=white" />
+  </a>
+  <a href="https://chromewebstore.google.com/detail/job-compass/ldiakgifmpecpocnchfhekjgjmjbfhfm">
+    <img src="https://img.shields.io/badge/Download-Chrome_Web_Store-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" />
+  </a>
+</div>
+
+---
+
 ## 🤝 Community & Governance
 We are a transparency-first organization. We operate openly and invite you to join us.
 

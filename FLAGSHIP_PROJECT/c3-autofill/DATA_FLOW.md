@@ -13,15 +13,13 @@
 ```mermaid
 sequenceDiagram
     actor U as User
-    participant OPT as Options Dashboard
-    participant BG as Background Service Worker
+    participant OPT as Options (React)
     participant ST as Chrome Storage
 
-    U->>OPT: Enter profile values and preferences
-    OPT->>BG: Save profile payload
-    BG->>ST: Persist profile and settings
-    ST-->>BG: Stored successfully
-    BG-->>OPT: Save confirmation
+    U->>OPT: Enter profile values and form entries
+    OPT->>OPT: Validate with isValidProfile / isValidEntry
+    OPT->>ST: saveProfiles() / saveEntries()
+    ST-->>OPT: Stored successfully
     OPT-->>U: Updated profile ready for autofill
 ```
 
@@ -37,13 +35,13 @@ sequenceDiagram
     participant BG as Background Service Worker
     participant ST as Chrome Storage
 
-    U->>PAGE: Open a supported form page
+    U->>PAGE: Open a form page
     PAGE-->>CS: DOM becomes available
     CS->>CS: Scan labels, names, placeholders, and grouping
-    CS->>BG: Request saved profile and rules
-    BG->>ST: Load local autofill data
-    ST-->>BG: Profile and preferences
-    BG-->>CS: Fill candidates and mapping rules
+    CS->>BG: Request active profile and entries
+    BG->>ST: Load profiles, entries, and settings
+    ST-->>BG: StorageData (c3Profiles, c3Entries, c3Settings)
+    BG-->>CS: Profile entries and fill mode (Overwrite/Append)
     CS-->>U: Ready-to-fill page state
 ```
 
@@ -54,23 +52,23 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor U as User
-    participant POP as Popup UI
+    participant POP as Popup (React)
     participant BG as Background Service Worker
     participant CS as Content Script
     participant PAGE as Web Form
 
-    U->>POP: Click "Autofill"
-    POP->>BG: Start fill for active tab
-    BG->>CS: Send profile data and rules
-    CS->>CS: Match fields with confidence scoring
+    U->>POP: Click "Fill Form"
+    POP->>BG: fillForm message (profileId, entries)
+    BG->>BG: Decrypt sensitive fields (AES-GCM)
+    BG->>CS: Send FormDataEntry[] with decrypted values
 
-    loop For each matched field
-        CS->>PAGE: Apply value to input or select
-        CS->>CS: Mark success or skip if ambiguous
+    loop For each FormDataEntry
+        CS->>CS: Match field by type, name, selector
+        CS->>PAGE: Apply value (Overwrite or Append mode)
     end
 
     CS-->>BG: Fill summary
-    BG-->>POP: Filled, skipped, and review counts
+    BG-->>POP: Result counts
     POP-->>U: Show result summary
 ```
 
@@ -81,15 +79,13 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor U as User
-    participant OPT as Options Dashboard
-    participant BG as Background Service Worker
+    participant OPT as Options (React)
     participant ST as Chrome Storage
 
-    U->>OPT: Click "Export JSON"
-    OPT->>BG: Request export payload
-    BG->>ST: Read profiles, rules, and settings
-    ST-->>BG: Local data snapshot
-    BG-->>OPT: Structured JSON payload
+    U->>OPT: Click "Export" in Advanced tab
+    OPT->>ST: loadAllData()
+    ST-->>OPT: StorageData snapshot
+    OPT->>OPT: Serialize to JSON
     OPT-->>U: Download backup file
 ```
 
@@ -100,56 +96,80 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor U as User
-    participant OPT as Options Dashboard
-    participant BG as Background Service Worker
+    participant OPT as Options (React)
     participant ST as Chrome Storage
 
-    U->>OPT: Select an exported JSON file
-    OPT->>OPT: Validate file structure
-    OPT->>BG: Submit import payload
-    BG->>ST: Replace or merge local records
-    ST-->>BG: Import saved
-    BG-->>OPT: Import status
-    OPT-->>U: Profiles and rules restored
+    U->>OPT: Select a JSON backup file
+    OPT->>OPT: Parse and validate structure
+    OPT->>ST: importData() — merge into storage
+    ST-->>OPT: Import complete
+    OPT-->>U: Profiles and entries restored
 ```
 
 ---
 
-## Data Storage Summary
+## 6. Encryption Flow
+
+```mermaid
+sequenceDiagram
+    participant OPT as Options (React)
+    participant CRYPTO as helper.ts (Web Crypto API)
+    participant ST as Chrome Storage
+
+    Note over OPT,ST: Saving a sensitive field
+    OPT->>CRYPTO: encryptValue(value, cryptoKey)
+    CRYPTO->>CRYPTO: AES-GCM encrypt with random IV
+    CRYPTO-->>OPT: Base64 encoded ciphertext
+    OPT->>ST: Store encrypted value
+
+    Note over OPT,ST: Reading a sensitive field
+    ST-->>OPT: Encrypted value
+    OPT->>CRYPTO: decryptValue(ciphertext, cryptoKey)
+    CRYPTO->>CRYPTO: AES-GCM decrypt
+    CRYPTO-->>OPT: Plaintext value
+```
+
+---
+
+## Data Storage Model
 
 ```mermaid
 erDiagram
-    profile ||--o{ field_mapping : uses
-    profile ||--o{ preference : configures
-    export_bundle ||--o{ profile : contains
-    export_bundle ||--o{ field_mapping : contains
+    StorageData ||--o{ Profile : "c3Profiles"
+    StorageData ||--o{ FormDataEntry : "c3Entries"
+    StorageData ||--|| Settings : "c3Settings"
+    StorageData ||--o{ FakerCategory : "c3FakerData"
+    Profile ||--o{ FormDataEntry : "profileId"
 
-    profile {
-        string id PK
-        string name
-        json personal_data
-        json professional_data
+    Profile {
+        string key PK
+        string site
+        string hostname
+        string createdAt
+        string modifiedAt
     }
 
-    field_mapping {
-        string id PK
-        string profile_id FK
-        string field_key
-        string selector_hint
-        string fallback_value
+    FormDataEntry {
+        string type
+        string field
+        string value
+        EntryMode mode
+        string profileId FK
     }
 
-    preference {
-        string id PK
-        string profile_id FK
-        boolean auto_fill_enabled
-        boolean confirm_before_fill
+    Settings {
+        boolean enableSensitiveFields
+        record sensitiveFields
+        boolean encryptSensitive
+        boolean autoloadEnabled
+        number autoloadDelay
     }
 
-    export_bundle {
-        string version
-        datetime exported_at
-        json payload
+    FakerCategory {
+        string id PK
+        string label
+        array values
+        array keywords
     }
 ```
 
@@ -159,15 +179,15 @@ erDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> ProfileReady: User saves profile
+    [*] --> ProfileReady: User saves profile and entries
     ProfileReady --> PageDetected: Supported form opened
-    PageDetected --> Mapping: Extension inspects fields
-    Mapping --> Fill: User starts autofill
-    Fill --> Review: Some fields skipped or need confirmation
-    Fill --> Complete: All mapped fields applied
-    Review --> Complete: User confirms or edits values
-    Complete --> Exported: User downloads backup
-    Exported --> [*]
+    PageDetected --> Mapping: Content script scans fields
+    Mapping --> Fill: User clicks Fill Form
+    Fill --> Decrypt: Sensitive fields detected
+    Decrypt --> Apply: AES-GCM decryption
+    Fill --> Apply: No sensitive fields
+    Apply --> Complete: All entries applied (Overwrite/Append)
+    Complete --> [*]
 ```
 
 ---

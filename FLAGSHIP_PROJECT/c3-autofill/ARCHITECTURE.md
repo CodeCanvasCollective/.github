@@ -12,29 +12,37 @@
 
 ```mermaid
 graph TB
-    subgraph "User Interface Layer"
-        POP["Popup UI<br/>(quick autofill controls)"]
-        OPT["Options Dashboard<br/>(profiles, rules, import/export)"]
-        CS["Content Scripts<br/>(page analysis and field mapping)"]
-    end
+    subgraph "Monorepo (npm workspaces)"
+        subgraph "apps/extension — Chrome Extension"
+            subgraph "User Interface (React + Tailwind CSS)"
+                POP["Popup UI<br/>(quick autofill controls)"]
+                OPT["Options Dashboard<br/>(profiles, rules, import/export)"]
+            end
 
-    subgraph "Browser Runtime"
-        BG["Background Service Worker<br/>(message routing, task coordination)"]
-        ST["Chrome Storage<br/>(encrypted local data)"]
-    end
+            subgraph "Browser Scripts"
+                CS["Content Script<br/>(page analysis and field filling)"]
+                BG["Background Service Worker<br/>(message routing, task coordination)"]
+            end
 
-    subgraph "Autofill Engine"
-        MAP["Field Detection<br/>(labels, names, DOM context)"]
-        RULES["Rules and Templates<br/>(saved values, profile mapping)"]
-        AI["Local AI Logic<br/>(matching and confidence scoring)"]
+            subgraph "Autofill Engine"
+                MAP["Heuristic Classifier<br/>(label, name, DOM context matching)"]
+                FAKER["Faker Module<br/>(test data generation)"]
+                CRYPTO["Encryption<br/>(AES-GCM for sensitive fields)"]
+            end
+
+            subgraph "Storage"
+                ST["Chrome Storage<br/>(profiles, entries, settings)"]
+                JSON["JSON Import/Export<br/>(backup and migration)"]
+            end
+        end
+
+        subgraph "apps/web — Marketing Site"
+            WEB["Vue 3 SPA<br/>(landing page, docs, setup guide)"]
+        end
     end
 
     subgraph "Target Websites"
-        FORMS["Job Forms and Web Forms<br/>(inputs, selects, textareas, uploads)"]
-    end
-
-    subgraph "Portability"
-        JSON["JSON Import/Export<br/>(backup and migration)"]
+        FORMS["Web Forms<br/>(inputs, selects, textareas)"]
     end
 
     POP --> BG
@@ -43,10 +51,9 @@ graph TB
 
     BG --> ST
     BG --> MAP
-    MAP --> RULES
-    MAP --> AI
-    RULES --> ST
-    AI --> ST
+    MAP --> FAKER
+    BG --> CRYPTO
+    CRYPTO --> ST
 
     CS -->|"reads page structure"| FORMS
     BG -->|"fill instructions"| CS
@@ -63,40 +70,51 @@ graph TB
 | Aspect | Detail |
 | :--- | :--- |
 | **Purpose** | Fast access to autofill actions on the current page |
-| **User Flow** | Review profile, trigger fill, inspect detected fields |
-| **Scope** | Lightweight controls intended for in-page productivity |
+| **Tech** | React 19, TypeScript, Tailwind CSS |
+| **User Flow** | Review active profile, trigger fill, search and manage keys |
+| **Entry Point** | `apps/extension/src/popup/index.html` (Vite multi-entry) |
 
-### 2. Content Scripts
+### 2. Content Script
 
 | Aspect | Detail |
 | :--- | :--- |
-| **Purpose** | Inspect the current page and identify fillable fields |
+| **Purpose** | Inspect the current page and fill form fields |
 | **Signals** | Labels, placeholders, input names, nearby text, form grouping |
-| **Behavior** | Maps saved data to fields and applies values in-page |
+| **Behavior** | Receives fill instructions from background, applies values in-page |
+| **Build** | Separate Vite build (`vite.content.config.ts`) producing a single `content.js` |
 
 ### 3. Options Dashboard
 
 | Aspect | Detail |
 | :--- | :--- |
-| **Purpose** | Manage saved profiles, autofill rules, and extension settings |
-| **Data Tools** | JSON import/export for backup and transfer |
-| **Configuration** | Field mappings, user preferences, site-specific behavior |
+| **Purpose** | Manage profiles, form entries, faker data, and extension settings |
+| **Tabs** | Entries, Settings, Faker Data, Advanced (import/export/delete) |
+| **Entry Point** | `apps/extension/src/options/index.html` (Vite multi-entry) |
 
 ### 4. Background Service Worker
 
 | Aspect | Detail |
 | :--- | :--- |
 | **Purpose** | Coordinate popup, options, and content script messaging |
-| **Responsibilities** | State loading, storage access, task orchestration |
-| **Security** | Keeps privileged extension actions out of page context |
+| **Responsibilities** | Profile loading, storage access, active profile tracking |
+| **Security** | Keeps privileged extension actions isolated from page context |
 
-### 5. Local Data Layer
+### 5. Heuristic Field Classifier
 
 | Aspect | Detail |
 | :--- | :--- |
-| **Storage** | Chrome extension local storage |
-| **Contents** | Profiles, rules, preferences, import/export payloads |
-| **Privacy Model** | User data remains local to the browser environment |
+| **Purpose** | Detect and classify form fields by analyzing DOM context |
+| **Location** | `apps/extension/src/services/classifier/` |
+| **Strategy** | Factory pattern with pluggable classifier implementations |
+
+### 6. Local Data Layer
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Storage** | Chrome extension local storage (`chrome.storage.local`) |
+| **Contents** | Profiles, form entries, settings, faker categories |
+| **Encryption** | AES-GCM encryption for sensitive field values |
+| **Privacy** | All user data remains local to the browser |
 
 ---
 
@@ -105,9 +123,13 @@ graph TB
 | Layer | Technologies |
 | :--- | :--- |
 | **Extension Runtime** | Chrome Extension Manifest V3 |
-| **Frontend** | HTML, CSS, JavaScript |
-| **Execution Model** | Popup UI, options page, content scripts, background worker |
-| **Persistence** | Chrome storage APIs |
+| **UI Framework** | React 19, TypeScript 5.7 |
+| **Styling** | Tailwind CSS 4, FontAwesome 6 |
+| **Build Tool** | Vite 6 (multi-entry: popup, options, background + separate content script) |
+| **Monorepo** | npm workspaces |
+| **Marketing Site** | Vue 3, Pinia, Vue Router, Vite |
+| **Persistence** | Chrome Storage APIs |
+| **Encryption** | Web Crypto API (AES-GCM) |
 | **Portability** | JSON import/export |
 | **Platforms** | Chromium-based browsers |
 
@@ -115,10 +137,12 @@ graph TB
 
 ## Security Model
 
-- **Local Data First** - user autofill data is stored locally rather than in a hosted backend.
-- **Extension Isolation** - page scripts do not get direct access to privileged extension storage.
-- **Controlled Filling** - fill operations run through extension logic instead of arbitrary page automation.
-- **Portable Backups** - JSON export enables migration without requiring a cloud account.
+- **Local Data First** — user autofill data is stored locally, never sent to a backend.
+- **AES-GCM Encryption** — sensitive field values (passwords, SSN, credit cards) are encrypted at rest using the Web Crypto API.
+- **Extension Isolation** — page scripts cannot access privileged extension storage.
+- **Controlled Filling** — fill operations run through extension logic with configurable field sensitivity controls.
+- **Portable Backups** — JSON export enables migration without requiring a cloud account.
+- **Sensitive Field Controls** — granular toggles for security, finance, and identity field categories.
 
 ---
 

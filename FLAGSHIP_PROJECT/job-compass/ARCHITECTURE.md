@@ -13,32 +13,32 @@
 ```mermaid
 graph TB
     subgraph "User Interface Layer"
-        EXT["🧩 Chrome Extension<br/>(Manifest V3 · Vanilla JS)"]
-        DESK["🖥️ Electron Desktop App<br/>(Win · macOS · Linux)"]
+        EXT["🧩 Chrome Extension<br/>(Manifest V3)<br/>Vanilla JS"]
+        DESK["🖥️ Desktop App<br/>(Electron 40)<br/>Windows / macOS / Linux"]
         WEB["🌐 Marketing Website<br/>(Static HTML/CSS)"]
     end
 
-    subgraph "Content Extraction — 12+ Job Boards"
+    subgraph "Content Extraction"
         LI["LinkedIn"]
         IND["Indeed"]
         CVL["CV-Library"]
         GLASS["Glassdoor"]
-        MORE["Seek · ZipRecruiter · Monster<br/>Reed · Naukri · Bayt · Kariyer · Jora"]
+        SEEK["Seek / ZipRecruiter<br/>Monster / Reed"]
     end
 
     EXT -->|"Content Script<br/>Auto-Extract"| LI
     EXT -->|"Content Script"| IND
     EXT -->|"Content Script"| CVL
     EXT -->|"Content Script"| GLASS
-    EXT -->|"Content Script"| MORE
+    EXT -->|"Content Script"| SEEK
 
-    subgraph "Backend Services (Python 3.13)"
-        API["⚡ FastAPI Bridge Server<br/>localhost:8765<br/>CORS Hardened · Rate Limited (60/min)"]
-
-        subgraph "MCP Servers — Model Context Protocol"
-            MCP_API["🤖 MCP API Server<br/>Cover Letter Generation<br/>Company Research<br/>Notion Sync"]
-            MCP_CLI["🤖 MCP CLI Server<br/>Batch Cover Letters<br/>Skill Extraction & Refinement<br/>Job Analysis & Scoring"]
-            MCP_SEARCH["🔍 MCP Search Server<br/>Daily Automated Job Hunt<br/>Salary Insights"]
+    subgraph "Backend Services"
+        API["⚡ FastAPI Bridge Server<br/>localhost:8765<br/>CORS Hardened · Rate Limited"]
+        
+        subgraph "MCP Servers (Model Context Protocol)"
+            MCP_API["🤖 MCP API Server<br/>Cover Letter Gen<br/>Company Research<br/>Notion Sync"]
+            MCP_CLI["🤖 MCP CLI Server<br/>Batch CL Gen<br/>Skill Extraction<br/>Job Analysis & Scoring"]
+            MCP_SEARCH["🔍 MCP Search Server<br/>Daily Job Hunt<br/>Salary Insights"]
         end
     end
 
@@ -49,7 +49,7 @@ graph TB
     API --> MCP_SEARCH
 
     subgraph "Data Layer"
-        DB[("💾 SQLite + WAL Mode<br/>─────────<br/>candidates · jobs<br/>interviews · tech_skills<br/>cover_letter_config")]
+        DB[("💾 SQLite + WAL<br/>jobs.db<br/>─────────<br/>candidates · jobs<br/>interviews · tech_skills<br/>cover_letter_config")]
         ESTORE["🔐 Encrypted Store<br/>(electron-store)<br/>API Keys · Preferences"]
     end
 
@@ -58,12 +58,12 @@ graph TB
     MCP_SEARCH --> DB
     DESK --> ESTORE
 
-    subgraph "External APIs & Integrations"
+    subgraph "External APIs"
         GEMINI["🧠 Google Gemini API<br/>(gemini-2.5-flash)"]
-        GEMINI_CLI["🧠 Gemini CLI<br/>(Local Subprocess · 4 Workers)"]
-        NOTION["📓 Notion API<br/>(Database Sync · 3 req/sec)"]
-        ADZUNA["🔎 Adzuna API<br/>(UK Jobs · 250 req/day)"]
-        JOOBLE["🔎 Jooble API<br/>(EU Jobs · 500 req/day)"]
+        GEMINI_CLI["🧠 Gemini CLI<br/>(Local Subprocess)"]
+        NOTION["📓 Notion API<br/>(Database Sync)"]
+        ADZUNA["🔎 Adzuna API<br/>(UK Jobs · 250/day)"]
+        JOOBLE["🔎 Jooble API<br/>(EU Jobs · 500/day)"]
     end
 
     MCP_API --> GEMINI
@@ -75,13 +75,27 @@ graph TB
     subgraph "CI/CD & Distribution"
         GHA["⚙️ GitHub Actions"]
         CWS["Chrome Web Store"]
-        R2["☁️ Cloudflare R2<br/>(Desktop Installers)"]
+        R2["☁️ Cloudflare R2"]
         GHR["📦 GitHub Releases"]
     end
 
     GHA -->|"Package Extension"| CWS
-    GHA -->|"Build Installers<br/>Win · macOS · Linux"| R2
+    GHA -->|"Build Installers<br/>Win·Mac·Linux"| R2
     GHA --> GHR
+
+    classDef ui fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    classDef service fill:#50C878,stroke:#2E7D4D,color:#fff
+    classDef data fill:#F5A623,stroke:#C47D0E,color:#fff
+    classDef external fill:#9B59B6,stroke:#6C3483,color:#fff
+    classDef cicd fill:#95A5A6,stroke:#707B7C,color:#fff
+    classDef site fill:#E74C3C,stroke:#A93226,color:#fff
+
+    class EXT,DESK ui
+    class WEB site
+    class API,MCP_API,MCP_CLI,MCP_SEARCH service
+    class DB,ESTORE data
+    class GEMINI,GEMINI_CLI,NOTION,ADZUNA,JOOBLE external
+    class GHA,CWS,R2,GHR cicd
 ```
 
 ---
